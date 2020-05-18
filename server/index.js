@@ -18,11 +18,14 @@ app.use(
     secret: SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
-    cookie: { maxAge: 1000 * 60 * 60 * 24 }
+    cookie: { maxAge: 1000 * 60 * 60 * 24 },
   })
 )
 
-massive(CONNECTION_STRING).then(db => {
+massive({
+  connectionString: CONNECTION_STRING,
+  ssl: { rejectUnauthorized: false },
+}).then((db) => {
   app.set("db", db)
   console.log("Database connected")
   const io = require("socket.io")(
@@ -30,7 +33,8 @@ massive(CONNECTION_STRING).then(db => {
       console.log(`Server listening on ${SERVER_PORT}`)
     )
   )
-  io.on("connection", socket => {
+  app.set("io", io)
+  io.on("connection", (socket) => {
     const db = app.get("db")
     // socket.on('login', body => gameCtrl.login())
   })
@@ -39,5 +43,5 @@ massive(CONNECTION_STRING).then(db => {
 //ENDPOINTS
 app.post("/auth/register", authCtrl.register)
 app.post("/auth/login", authCtrl.login)
-app.post("/auth/logout", authCtrl.logout)
-app.get("/auth/user", authCtrl.getUser)
+app.post("/auth/logout", authMid.usersOnly, authCtrl.logout)
+app.get("/auth/user", authMid.usersOnly, authCtrl.getUser)
