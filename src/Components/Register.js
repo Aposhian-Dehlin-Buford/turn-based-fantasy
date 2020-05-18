@@ -6,7 +6,7 @@ import setUser from "../redux/authReducer"
 import { connect } from "react-redux"
 
 const Register = ({ setUser }) => {
-  const [{ username, email, password }, setValues] = useInput({
+  const [{ username, email, password }, { setInput }] = useInput({
     username: "",
     email: "",
     password: "",
@@ -14,10 +14,12 @@ const Register = ({ setUser }) => {
   const { push } = useHistory()
   const register = (e) => {
     e.preventDefault()
-    axios.post('/auth/register', {email, username, password}).then(results => {
-      setUser(results.data)
-      push('/dashboard')
-    })
+    axios
+      .post("/auth/register", { email, username, password })
+      .then((results) => {
+        setUser(results.data)
+        push("/dashboard")
+      })
   }
   return (
     <div>
@@ -27,20 +29,20 @@ const Register = ({ setUser }) => {
           name="email"
           placeholder="enter email"
           value={email}
-          onChange={setValues}
+          onChange={setInput}
         />
         <input
           name="username"
           placeholder="enter username"
           value={username}
-          onChange={setValues}
+          onChange={setInput}
         />
         <input
           type="password"
           name="password"
           placeholder="enter password"
           value={password}
-          onChange={setValues}
+          onChange={setInput}
         />
         <button type="submit">Login</button>
       </form>

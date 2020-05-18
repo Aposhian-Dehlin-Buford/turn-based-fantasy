@@ -1,23 +1,23 @@
 import React from "react"
 import useInput from "../hooks/useInput"
-import {useHistory} from 'react-router-dom'
-import axios from 'axios'
-import setUser from '../redux/authReducer'
-import {connect} from 'react-redux'
+import { useHistory } from "react-router-dom"
+import axios from "axios"
+import setUser from "../redux/authReducer"
+import { connect } from "react-redux"
 
-const Login = ({setUser}) => {
-  const [{ username, password }, setValues] = useInput({
+const Login = ({ setUser }) => {
+  const [{ username, password }, { setInput }] = useInput({
     username: "",
     password: "",
   })
-  const {push} = useHistory()
+  const { push } = useHistory()
   const login = (e) => {
     e.preventDefault()
     axios
       .post("/auth/login", { username, password })
       .then((results) => {
         setUser(results.data)
-        push('/dashboard')
+        push("/dashboard")
       })
       .catch((err) => console.log(err))
   }
@@ -29,14 +29,14 @@ const Login = ({setUser}) => {
           name="username"
           placeholder="enter username"
           value={username}
-          onChange={setValues}
+          onChange={setInput}
         />
         <input
           type="password"
           name="password"
           placeholder="enter password"
           value={password}
-          onChange={setValues}
+          onChange={setInput}
         />
         <button type="submit">Login</button>
       </form>
@@ -44,4 +44,4 @@ const Login = ({setUser}) => {
   )
 }
 
-export default connect(null, {setUser})(Login)
+export default connect(null, { setUser })(Login)
