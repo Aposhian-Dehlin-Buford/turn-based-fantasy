@@ -2,7 +2,7 @@ import React from "react"
 import useInput from "../hooks/useInput"
 import { useHistory } from "react-router-dom"
 import axios from "axios"
-import setUser from "../redux/authReducer"
+import {setUser} from "../redux/authReducer"
 import { connect } from "react-redux"
 
 const Register = ({ setUser }) => {
