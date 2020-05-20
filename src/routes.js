@@ -4,6 +4,7 @@ import LandingPage from './Components/LandingPage'
 import Dashboard from './Components/Dashboard'
 import Login from './Components/Login'
 import Register from './Components/Register'
+import UserList from './Components/UserList'
 
 export default (
   <Switch>
@@ -11,5 +12,6 @@ export default (
   <Route path = '/dashboard' component = {Dashboard} />
   <Route path = '/login' component = {Login} />
   <Route path = '/register' component = {Register} />
+  <Route path  = '/userlist' component = {UserList} />
 </Switch>
 )

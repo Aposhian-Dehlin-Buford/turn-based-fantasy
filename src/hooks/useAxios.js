@@ -7,6 +7,8 @@ const useAxios = (dataName, axiosId = null) => {
     dataName.substr(0, 1).toUpperCase() + dataName.substr(1).toLowerCase()
   const pluralName = `${dataName}s`
   const getAxios = `get${pluralName}`
+  const setSingleDataString = `set${camelCaseDataName}`
+  const setAxiosDataString = `set${camelCaseDataName}s`
   const getSingleAxios = `get${camelCaseDataName}`
   const postAxios = `post${camelCaseDataName}`
   const putAxios = `put${camelCaseDataName}`
@@ -60,6 +62,8 @@ const useAxios = (dataName, axiosId = null) => {
         .then(({ data }) => setAxiosData(data))
         .catch((err) => console.log(err))
     },
+    [setSingleDataString]: setSingleData,
+    [setAxiosDataString]: setAxiosData
   }
 }
 
