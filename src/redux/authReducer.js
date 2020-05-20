@@ -10,7 +10,6 @@ export function setUser(payload){
 }
 
 export default function authReducer(state = initialState, action){
-    console.log(action)
     const {type, payload} = action
     switch(type){
         case SET_USER:
