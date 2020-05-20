@@ -2,7 +2,7 @@ import React from "react"
 import useInput from "../hooks/useInput"
 import { useHistory } from "react-router-dom"
 import axios from "axios"
-import {setUser} from "../redux/authReducer"
+import { setUser } from "../redux/authReducer"
 import { connect } from "react-redux"
 
 const Login = ({ setUser }) => {
@@ -15,8 +15,8 @@ const Login = ({ setUser }) => {
     e.preventDefault()
     axios
       .post("/auth/login", { username, password })
-      .then((results) => {
-        setUser(results.data)
+      .then(({ data }) => {
+        setUser(data)
         push("/dashboard")
       })
       .catch((err) => console.log(err))
