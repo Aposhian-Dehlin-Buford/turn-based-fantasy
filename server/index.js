@@ -3,6 +3,7 @@ const express = require("express")
 const session = require("express-session")
 const massive = require("massive")
 const app = express()
+let users = []
 
 const { SERVER_PORT, SESSION_SECRET, CONNECTION_STRING } = process.env
 
@@ -28,6 +29,7 @@ massive({
   ssl: { rejectUnauthorized: false },
 }).then((db) => {
   app.set("db", db)
+  app.set('users', users)
   console.log("Database connected")
   const io = require("socket.io")(
     app.listen(SERVER_PORT, () =>
@@ -37,7 +39,9 @@ massive({
   app.set("io", io)
   io.on("connection", (socket) => {
     const db = app.get("db")
+
     app.set('socket', socket)
+    // app.set('sockets', sockets)
     // socket.on('login', body => gameCtrl.login())
     socket.on('join', (body) => userCtrl.join(app, body))
     socket.on('leave', (body) => userCtrl.leave(app, body))

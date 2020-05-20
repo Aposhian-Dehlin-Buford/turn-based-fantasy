@@ -5,8 +5,7 @@ import useAuth from "../hooks/useAuth"
 
 const UserList = () => {
   useAuth()
-  const userStuff = useAxios("user")
-  const { users, setUsers } = userStuff
+  const { users, setUsers } = useAxios("user")
   const { socket } = useSelector(({ socketReducer }) => socketReducer)
   const { user } = useSelector(({ authReducer }) => authReducer)
   useEffect(() => {
