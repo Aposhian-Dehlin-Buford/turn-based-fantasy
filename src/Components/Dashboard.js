@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react"
 import useAuth from "../hooks/useAuth"
 import io from "socket.io-client"
-import {setSocket} from '../redux/socketReducer'
-import {connect} from 'react-redux'
+import { setSocket } from "../redux/socketReducer"
+import { connect } from "react-redux"
 
-const Dashboard = ({setSocket}) => {
+const Dashboard = ({ setSocket }) => {
   useAuth()
   let socket = io.connect("http://localhost:3333")
   useEffect(() => {
@@ -13,4 +13,4 @@ const Dashboard = ({setSocket}) => {
   return <div>Dashboard</div>
 }
 
-export default connect(null, {setSocket})(Dashboard)
+export default connect(null, { setSocket })(Dashboard)

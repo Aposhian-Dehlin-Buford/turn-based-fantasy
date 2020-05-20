@@ -6,23 +6,24 @@ import useAuth from "../hooks/useAuth"
 const UserList = () => {
   useAuth()
   const userStuff = useAxios("user")
-  const {users, setUsers} = userStuff
+  const { users, setUsers } = userStuff
   const { socket } = useSelector(({ socketReducer }) => socketReducer)
   const { user } = useSelector(({ authReducer }) => authReducer)
   useEffect(() => {
     socket.emit("join", user)
-    socket.on('users', body => {
-      console.log(body)
-      setUsers(body)
-    })
+    socket.on("users", (body) => setUsers(body))
     return () => {
-      socket.emit('leave', user)
-      socket.disconnect()}
+      socket.emit("leave", user)
+      socket.disconnect()
+    }
   }, [])
   return (
     <div>
       <div>Active Users:</div>
-      {users.length > 0 && users.map(({ username }) => <div>{username}</div>)}
+      {users.length > 0 &&
+        users.map(({ username, user_id }) => (
+          <div key={user_id}>{username}</div>
+        ))}
     </div>
   )
 }
