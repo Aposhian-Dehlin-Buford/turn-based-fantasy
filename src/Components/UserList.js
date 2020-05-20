@@ -8,8 +8,8 @@ const UserList = () => {
   const { users, setUsers } = useAxios("user")
   const { socket } = useSelector(({ socketReducer }) => socketReducer)
   const { user } = useSelector(({ authReducer }) => authReducer)
-  useEffect(async () => {
-    await socket.emit("join", user)
+  useEffect(() => {
+    socket.emit("join", user)
     socket.on("users", (body) => setUsers(body))
     socket.on("send-challenge", (body) => alert(`you were challenged by ${body.challenger.user_id}`))
     return () => {

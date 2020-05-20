@@ -1,22 +1,16 @@
 let users = []
 
-const removeSocketId = (users) => {
-  // console.log(users)
-  return users.map(({ username, email, user_id }) => ({
+const removeSocketId = (users) =>
+  users.map(({ username, email, user_id }) => ({
     username,
     email,
     user_id,
   }))
-  // console.log(newUsers)
-  // return newUsers
-}
 
 module.exports = {
   getUsers: (req, res) => {
     const users = req.app.get("users")
-    const list = removeSocketId(users)
-    console.log(list)
-    res.status(200).send(list)
+    res.status(200).send(removeSocketId(users))
   },
   join: (app, body) => {
     const io = app.get("io")
