@@ -11,6 +11,7 @@ const Header = () => {
         <div>
           <button onClick={() => push("/dashboard")}>Dashboard</button>
           <button onClick={() => push("/userlist")}>User List</button>
+          <button onClick={() => alert('log out')}>Log Out</button>
         </div>
       )}
       {!user || !user.user_id && (
