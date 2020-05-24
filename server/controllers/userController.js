@@ -1,5 +1,3 @@
-let users = []
-
 const removeSocketId = (users) =>
   users.map(({ username, email, user_id }) => ({
     username,
@@ -14,7 +12,6 @@ module.exports = {
   },
   join: (app, body, socket) => {
     const io = app.get("io")
-    // const socket = app.get("socket")
     const users = app.get("users")
     socket.join("userlist")
     users.push({ ...body, socket_id: socket.id })

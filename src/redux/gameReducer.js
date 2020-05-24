@@ -10,6 +10,7 @@ const initialState = {
 }
 
 export function setGameState(payload){
+    console.log('hit reducer')
     return {type: SET_GAME_STATE, payload}
 }
 

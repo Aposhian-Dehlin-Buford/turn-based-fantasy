@@ -1,5 +1,3 @@
-let lobbies = []
-
 const exampleBody = {
   challenger: { user_id: 1, username: "1", email: "1", socket_id: 23847239 },
   opponent: { user_id: 2, username: "2", email: "2", socket_id: 23794239874 },
@@ -9,14 +7,14 @@ const exampleBody = {
 const generateInitialGameState = ({challenger, opponent}) => {
   const activePlayer = Math.floor(Math.random() * 2 < 1) ? 0 : 1
   const players = [challenger, opponent]
-  return { players, activePlayer }
+  return { players, activePlayer, gameStart: true }
 }
 
 const checkChallenges = () => {}
 
 module.exports = {
   getLobbies: (req, res) => {
-    res.status(200).send(lobbies)
+    res.status(200).send(req.app.get('lobbies'))
   },
   challenge: (app, body) => {
     const io = app.get("io")
@@ -37,7 +35,6 @@ module.exports = {
       challenges.push(body)
       const opponentSocket = users.find((u) => +opponent.user_id === +u.user_id)
       console.log(`${challenger.username} challenged ${opponent.username}`)
-      // console.log(opponentSocket.socket_id)
       app.set("challenges", challenges)
       io.to(opponentSocket.socket_id).emit("send-challenge", body)
     }
