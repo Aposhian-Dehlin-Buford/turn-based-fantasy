@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react"
 import useAxios from "../hooks/useAxios"
-import { useSelector } from "react-redux"
+import { useSelector, connect } from "react-redux"
 import useAuth from "../hooks/useAuth"
+import {setGameState} from '../redux/gameReducer'
 
-const UserList = () => {
+const UserList = ({setGameState}) => {
   useAuth()
   const { users, setUsers } = useAxios("user")
   const [challenges, setChallenges] = useState([])
@@ -14,14 +15,25 @@ const UserList = () => {
     socket.on("users", (body) => setUsers(body))
     socket.on("send-challenge", (body) => {
       setChallenges((c) => {
-        if(c.length === 0) return [body]
+        if (c.length === 0) return [body]
         else return c.push(body)
       })
     })
-    return () => {
-      socket.emit("leave", user)
-      socket.disconnect()
-    }
+    socket.on("remove-challenge", (body) => {
+      setChallenges((c) => {
+        return c.filter((e) => {
+          if (e.challenger.user_id === body.user_id) {
+            return null
+          } else {
+            return e
+          }
+        })
+      })
+    })
+    socket.on("game-start", (body) => {
+      console.log(body)
+      setGameState(body)
+    })
   }, [])
   return (
     <div>
@@ -69,4 +81,4 @@ const UserList = () => {
   )
 }
 
-export default UserList
+export default connect(null, {setGameState})(UserList)

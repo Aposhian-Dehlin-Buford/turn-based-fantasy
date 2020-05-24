@@ -43,13 +43,8 @@ massive({
   )
   app.set("io", io)
   io.on("connection", (socket) => {
-    const db = app.get("db")
-
-    app.set('socket', socket)
-    // app.set('sockets', sockets)
-    // socket.on('login', body => gameCtrl.login())
-    socket.on('join', (body) => userCtrl.join(app, body))
-    socket.on('leave', (body) => userCtrl.leave(app, body))
+    socket.on('disconnect', () => userCtrl.leave(app, socket))
+    socket.on('join', (body) => userCtrl.join(app, body, socket))
     socket.on('challenge', (body) => lobbyCtrl.challenge(app, body))
     socket.on('accept-challenge', (body) => lobbyCtrl.acceptChallenge(app, body))
   })
