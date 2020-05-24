@@ -14,18 +14,26 @@ const UserList = () => {
     socket.on("users", (body) => setUsers(body))
     socket.on("send-challenge", (body) => {
       setChallenges((c) => {
-        if(c.length === 0) return [body]
+        if (c.length === 0) return [body]
         else return c.push(body)
       })
     })
-    socket.on('game-start', (body) => {
-      console.log('game started')
+    socket.on("remove-challenge", (body) => {
+      console.log(body)
+      setChallenges((c) => {
+        return c.filter((e) => {
+          if (e.challenger.user_id === body.user_id) {
+            return null
+          } else {
+            return e
+          }
+        })
+      })
+    })
+    socket.on("game-start", (body) => {
+      console.log("game started")
       console.log(body)
     })
-    // return () => {
-    //   socket.emit("leave", user)
-    //   socket.disconnect()
-    // }
   }, [])
   return (
     <div>
