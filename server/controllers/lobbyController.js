@@ -6,6 +6,10 @@ const exampleBody = {
   gameStart: false,
 }
 
+const generateInitialGameState = (body) => {
+  return {}
+}
+
 module.exports = {
   getLobbies: (req, res) => {
     res.status(200).send(lobbies)
@@ -32,6 +36,33 @@ module.exports = {
       console.log(opponentSocket.socket_id)
       app.set("challenges", challenges)
       io.to(opponentSocket.socket_id).emit("send-challenge", body)
+    }
+  },
+  acceptChallenge: (app, body) => {
+    const io = app.get('io')
+    const users = app.get('users')
+    const challenges = app.get('challenges')
+    const lobbies = app.get('lobbies')
+    const {challenger, opponent} = body
+    const challengeIndex = challenges.findIndex((c) => {
+      if (
+        (c.challenger.user_id === challenger.user_id &&
+          c.opponent.user_id === opponent.user_id) ||
+        (c.challenger.user_id === opponent.user_id &&
+          c.opponent.user_id === challenger.user_id)
+      ) {
+        return c
+      }
+    })
+    if(challengeIndex !== -1){
+      const gameState = generateInitialGameState(body)
+      lobbies.push(gameState)
+      const challengerSocket = users.find(u => +challenger.user_id === +u.user_id)
+      const opponentSocket = users.find(u => +opponent.user_id === +u.user_id)
+      app.set('challenges', challenges)
+      app.set('lobbies', lobbies)
+      io.to(challengerSocket.socket_id).emit('game-start', gameState)
+      io.to(opponentSocket.socket_id).emit('game-start', gameState)
     }
   },
   joinLobby: (app, body) => {},

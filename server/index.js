@@ -4,8 +4,8 @@ const session = require("express-session")
 const massive = require("massive")
 const app = express()
 let users = []
-let lobbies = []
 let challenges = []
+let lobbies = []
 
 const { SERVER_PORT, SESSION_SECRET, CONNECTION_STRING } = process.env
 
@@ -51,6 +51,7 @@ massive({
     socket.on('join', (body) => userCtrl.join(app, body))
     socket.on('leave', (body) => userCtrl.leave(app, body))
     socket.on('challenge', (body) => lobbyCtrl.challenge(app, body))
+    socket.on('accept-challenge', (body) => lobbyCtrl.acceptChallenge(app, body))
   })
 })
 
