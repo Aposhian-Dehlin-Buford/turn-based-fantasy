@@ -6,7 +6,12 @@ const exampleBody = {
 
 const generateInitialGameState = ({challenger, opponent}) => {
   const activePlayer = Math.floor(Math.random() * 2 < 1) ? 0 : 1
-  const players = [challenger, opponent]
+  const players = [{...challenger, resources: {
+    tech: 1,
+    
+  }}, {...opponent, resources: {
+
+  }}]
   return { players, activePlayer, gameStart: true }
 }
 
