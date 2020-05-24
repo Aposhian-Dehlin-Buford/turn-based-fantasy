@@ -12,7 +12,7 @@ const Header = () => {
       {user && user.user_id && (
         <div>
           <button onClick={() => push("/dashboard")}>Dashboard</button>
-          <button onClick={() => push("/userlist")}>User List</button>
+          {/* <button onClick={() => push("/userlist")}>User List</button> */}
           <button
             onClick={() => {
               axios

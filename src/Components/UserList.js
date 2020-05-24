@@ -18,10 +18,14 @@ const UserList = () => {
         else return c.push(body)
       })
     })
-    return () => {
-      socket.emit("leave", user)
-      socket.disconnect()
-    }
+    socket.on('game-start', (body) => {
+      console.log('game started')
+      console.log(body)
+    })
+    // return () => {
+    //   socket.emit("leave", user)
+    //   socket.disconnect()
+    // }
   }, [])
   return (
     <div>

@@ -12,5 +12,8 @@ const actionTypes = {
   PENDING: '_PENDING',
   FULFILLED: 'FULFILLED',
   REJECTED: '_REJECTED',
+
+  //GAME ACTIONS
+  SET_GAME_STATE: "SET_GAME_STATE",
 }
 export default actionTypes
