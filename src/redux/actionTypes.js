@@ -15,5 +15,6 @@ const actionTypes = {
 
   //GAME ACTIONS
   SET_GAME_STATE: "SET_GAME_STATE",
+  SET_MAP_STATE: "SET_MAP_STATE",
 }
 export default actionTypes

@@ -8,11 +8,6 @@ const removeSocketId = (users) =>
 module.exports = {
   removeSocketId: (users) => {
     return removeSocketId(users)
-    // users.map(({ username, email, user_id }) => ({
-    //   username,
-    //   email,
-    //   user_id,
-    // }))
   },
   generateInitialGameState: ({ challenger, opponent }) => {
     const activePlayer = Math.floor(Math.random() * 2 < 1) ? 0 : 1
@@ -53,7 +48,6 @@ module.exports = {
   removeUserFromList: (app, socket) => {
     const io = app.get("io")
     const users = app.get("users")
-    // const challenges = app.get("challenges")
     const { userIndex, user_id } = users.reduce(
       (acc, e, i) => {
         if (e.socket_id === socket.id) {
