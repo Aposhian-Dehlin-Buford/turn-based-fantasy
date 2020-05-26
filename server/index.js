@@ -13,6 +13,7 @@ const { SERVER_PORT, SESSION_SECRET, CONNECTION_STRING } = process.env
 const authCtrl = require("./controllers/authController")
 const userCtrl = require('./controllers/userController')
 const lobbyCtrl = require('./controllers/lobbyController')
+const gameCtrl = require('./controllers/gameController')
 
 //MIDDLEWARE
 const authMid = require("./middleware/authMiddleware")
@@ -47,6 +48,7 @@ massive({
     socket.on('join', (body) => userCtrl.join(app, body, socket))
     socket.on('challenge', (body) => lobbyCtrl.challenge(app, body))
     socket.on('accept-challenge', (body) => lobbyCtrl.acceptChallenge(app, body))
+    socket.on('end-turn', (body) => gameCtrl.endTurn(app, body))
   })
 })
 
