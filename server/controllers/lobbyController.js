@@ -1,42 +1,46 @@
+const {
+  removeUserFromList,
+  removeUserChallenges,
+  generateInitialGameState,
+  findChallengeIndex,
+} = require("../utils/lobbyUtils")
+
 const exampleBody = {
   challenger: { user_id: 1, username: "1", email: "1", socket_id: 23847239 },
   opponent: { user_id: 2, username: "2", email: "2", socket_id: 23794239874 },
   gameStart: false,
 }
 
-const generateInitialGameState = ({challenger, opponent}) => {
-  const activePlayer = Math.floor(Math.random() * 2 < 1) ? 0 : 1
-  const players = [{...challenger, resources: {
-    tech: 1,
-    
-  }}, {...opponent, resources: {
-
-  }}]
-  return { players, activePlayer, gameStart: true }
-}
-
-const checkChallenges = () => {}
+// const generateInitialGameState = ({challenger, opponent}) => {
+//   const activePlayer = Math.floor(Math.random() * 2 < 1) ? 0 : 1
+//   const players = [{...challenger, resources: {
+//     tech: 1,
+//   }}, {...opponent, resources: {
+//     tech: 1,
+//   }}]
+//   return { players, activePlayer, gameStart: true, room: `${challenger.user_id}-${opponent.user_id}` }
+// }
 
 module.exports = {
   getLobbies: (req, res) => {
-    res.status(200).send(req.app.get('lobbies'))
+    res.status(200).send(req.app.get("lobbies"))
   },
   challenge: (app, body) => {
     const io = app.get("io")
     const users = app.get("users")
     const challenges = app.get("challenges")
     const { challenger, opponent } = body
-    const challengeIndex = challenges.findIndex((c) => {
-      if (
-        (c.challenger.user_id === challenger.user_id &&
-          c.opponent.user_id === opponent.user_id) ||
-        (c.challenger.user_id === opponent.user_id &&
-          c.opponent.user_id === challenger.user_id)
-      ) {
-        return c
-      }
-    })
-    if (challengeIndex === -1) {
+    // const challengeIndex = challenges.findIndex((c) => {
+    //   if (
+    //     (c.challenger.user_id === challenger.user_id &&
+    //       c.opponent.user_id === opponent.user_id) ||
+    //     (c.challenger.user_id === opponent.user_id &&
+    //       c.opponent.user_id === challenger.user_id)
+    //   ) {
+    //     return c
+    //   }
+    // })
+    if (findChallengeIndex(challenges, body) === -1) {
       challenges.push(body)
       const opponentSocket = users.find((u) => +opponent.user_id === +u.user_id)
       console.log(`${challenger.username} challenged ${opponent.username}`)
@@ -50,27 +54,37 @@ module.exports = {
     const challenges = app.get("challenges")
     const lobbies = app.get("lobbies")
     const { challenger, opponent } = body
-    const challengeIndex = challenges.findIndex((c) => {
-      if (
-        (c.challenger.user_id === challenger.user_id &&
-          c.opponent.user_id === opponent.user_id) ||
-        (c.challenger.user_id === opponent.user_id &&
-          c.opponent.user_id === challenger.user_id)
-      ) {
-        return c
-      }
-    })
-    if (challengeIndex !== -1) {
+    // const challengeIndex = challenges.findIndex((c) => {
+    //   if (
+    //     (c.challenger.user_id === challenger.user_id &&
+    //       c.opponent.user_id === opponent.user_id) ||
+    //     (c.challenger.user_id === opponent.user_id &&
+    //       c.opponent.user_id === challenger.user_id)
+    //   ) {
+    //     return c
+    //   }
+    // })
+    if (findChallengeIndex(challenges, body) !== -1) {
       const gameState = generateInitialGameState(body)
       lobbies.push(gameState)
       const challengerSocket = users.find(
         (u) => +challenger.user_id === +u.user_id
       )
       const opponentSocket = users.find((u) => +opponent.user_id === +u.user_id)
-      app.set("challenges", challenges)
+      // app.set("challenges", challenges)
+      removeUserChallenges(challenger.user_id, app)
+      removeUserChallenges(opponent.user_id, app)
       app.set("lobbies", lobbies)
-      io.to(challengerSocket.socket_id).emit("game-start", gameState)
-      io.to(opponentSocket.socket_id).emit("game-start", gameState)
+      //io.sockets.connected[socketId]
+      const { room } = gameState
+      io.sockets.connected[challengerSocket.socket_id].join(room)
+      io.sockets.connected[opponentSocket.socket_id].join(room)
+
+      // io.in("userlist").emit("remove-challenge", { user_id: challenger.user_id })
+      // io.in("userlist").emit("remove-challenge", { user_id: opponent.user_id })
+      io.to(room).emit("game-start", gameState)
+      // io.to(challengerSocket.socket_id).emit("game-start", gameState)
+      // io.to(opponentSocket.socket_id).emit("game-start", gameState)
     }
   },
   joinLobby: (app, body) => {},
