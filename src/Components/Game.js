@@ -1,33 +1,36 @@
-import React, {useEffect} from "react"
+import React, { useEffect } from "react"
 import { useSelector } from "react-redux"
-import {connect} from 'react-redux'
-import {updateResources, updateActivePlayer} from '../redux/gameReducer'
+import { connect } from "react-redux"
+import { updateResources, updateActivePlayer } from "../redux/newGameReducer"
 
-const Game = ({updateResources, updateActivePlayer}) => {
+const Game = ({ updateResources, updateActivePlayer }) => {
   const { socket } = useSelector(({ socketReducer }) => socketReducer)
-  const {user} = useSelector(({authReducer}) => authReducer)
-  const { gameState } = useSelector(({ gameReducer }) => gameReducer)
-  const { me, opponent, players, map, active, activePlayer, room } = gameState
+  const { user } = useSelector(({ authReducer }) => authReducer)
+  const { active, map, me, resources, room } = useSelector(
+    ({ newGameReducer }) => newGameReducer
+  )
+  // const { me, opponent, players, map, active, activePlayer, room } = gameState
+  // console.log(gameState)
   useEffect(() => {
-    socket.on('update-resources', (resources) => {
+    socket.on("update-resources", (resources) => {
       updateResources(resources)
     })
-    socket.on('change-player', (activePlayer) => {
-      updateActivePlayer(activePlayer)
+    socket.on("change-player", () => {
+      updateActivePlayer()
     })
   }, [])
   return (
     <div>
       <div>Game</div>
       <div>
-        <div>My Tech: {me.resources.tech}</div>
+        <div>My Tech: {resources.tech}</div>
         {active && (
           <button
             onClick={() =>
               socket.emit("end-turn", {
-                resources: me.resources,
-                activePlayer,
-                room
+                resources: resources,
+                // activePlayer,
+                room,
               })
             }
           >
@@ -39,4 +42,4 @@ const Game = ({updateResources, updateActivePlayer}) => {
   )
 }
 
-export default connect(null, {updateResources, updateActivePlayer})(Game)
+export default connect(null, { updateResources, updateActivePlayer })(Game)

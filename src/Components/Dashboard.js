@@ -10,7 +10,7 @@ let sock = io.connect("http://localhost:3333")
 
 const Dashboard = ({ setSocket }) => {
   useAuth()
-  const [toggleUsers, setToggleUsers] = useState(true)
+  // const [toggleUsers, setToggleUsers] = useState(true)
   const { socket } = useSelector(({ socketReducer }) => socketReducer)
   const {gameState} = useSelector(({gameReducer}) => gameReducer)
   useEffect(() => {
@@ -23,10 +23,10 @@ const Dashboard = ({ setSocket }) => {
     <div>
       {socket && (
         <>
-        <button
+        {/* <button
         onClick = {() => setToggleUsers((t) => !t)}
-        >Toggle Active User List</button>
-          {toggleUsers && <UserList />}
+        >Toggle Active User List</button> */}
+          <UserList />
           {gameState.gameStart && <Game />}
           {/* <Route path="/userlist" component={UserList} />
           <Route path="/game" component={Game} /> */}

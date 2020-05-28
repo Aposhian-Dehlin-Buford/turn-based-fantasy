@@ -2,10 +2,11 @@ import React, { useState, useEffect } from "react"
 import useAxios from "../hooks/useAxios"
 import { useSelector, connect } from "react-redux"
 import useAuth from "../hooks/useAuth"
-import { setGameState } from "../redux/gameReducer"
+import { setGameState } from "../redux/newGameReducer"
 
 const UserList = ({ setGameState }) => {
   useAuth()
+  const [toggleUsers, setToggleUsers] = useState(true)
   const { users, setUsers } = useAxios("user")
   const [challenges, setChallenges] = useState([])
   const { socket } = useSelector(({ socketReducer }) => socketReducer)
@@ -32,54 +33,63 @@ const UserList = ({ setGameState }) => {
       })
     })
     socket.on("game-start", (body) => {
+      // console.log(body)
+      setToggleUsers(false)
       setGameState(body, user.user_id)
     })
   }, [])
   return (
     <div>
-      <div>Active Users:</div>
-      {users.length > 0 &&
-        users.map(({ username, user_id, email }) => (
-          <div key={user_id}>
-            <span>{username}</span>
-            {user.user_id !== user_id && !gameState.gameStart && (
-              <button
-                onClick={() => {
-                  if (user.user_id !== user_id) {
-                    socket.emit("challenge", {
-                      challenger: user,
-                      opponent: { username, user_id, email },
-                      gameStart: false,
-                    })
-                  }
-                }}
-              >
-                Challenge
-              </button>
-            )}
-          </div>
-        ))}
-      {challenges.length > 0 && (
+      <button
+      onClick ={() => setToggleUsers(!toggleUsers)}
+      >{toggleUsers ? "Hide Users": "View Users"}</button>
+      {toggleUsers && (
         <div>
-          <div>Challenges:</div>
-          {challenges.map(({ challenger, opponent }) => (
-            <div key={challenger.user_id}>
-              <span>{challenger.username}</span>
-              <button
-                onClick={() =>
-                  socket.emit("accept-challenge", {
-                    challenger,
-                    opponent,
-                    gameStart: true,
-                  })
-                }
-              >
-                Accept
-              </button>
+          <div>Active Users:</div>
+          {users.length > 0 &&
+            users.map(({ username, user_id, email }) => (
+              <div key={user_id}>
+                <span>{username}</span>
+                {user.user_id !== user_id && !gameState.gameStart && (
+                  <button
+                    onClick={() => {
+                      if (user.user_id !== user_id) {
+                        socket.emit("challenge", {
+                          challenger: user,
+                          opponent: { username, user_id, email },
+                          gameStart: false,
+                        })
+                      }
+                    }}
+                  >
+                    Challenge
+                  </button>
+                )}
+              </div>
+            ))}
+          {challenges.length > 0 && (
+            <div>
+              <div>Challenges:</div>
+              {challenges.map(({ challenger, opponent }) => (
+                <div key={challenger.user_id}>
+                  <span>{challenger.username}</span>
+                  <button
+                    onClick={() =>
+                      socket.emit("accept-challenge", {
+                        challenger,
+                        opponent,
+                        gameStart: true,
+                      })
+                    }
+                  >
+                    Accept
+                  </button>
+                </div>
+              ))}
             </div>
-          ))}
+          )}
         </div>
-      )}
+        )}
     </div>
   )
 }

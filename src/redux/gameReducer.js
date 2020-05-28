@@ -7,8 +7,9 @@ const {
 } = actionTypes
 
 const initialState = {
-  me: null,
+//   me: {},
   gameState: {
+      active: false,
     activePlayer: null,
     players: [],
     gameStart: false,
@@ -39,12 +40,11 @@ export function setGameState(payload, user_id) {
 }
 
 export function updateResources(payload) {
-  console.log(payload)
   return { type: UPDATE_RESOURCES, payload }
 }
 
 export function updateActivePlayer(payload) {
-  return { type: UPDATE_ACTIVE_PLAYER, payload }
+  return { type: UPDATE_ACTIVE_PLAYER }
 }
 
 export default function gameReducer(state = initialState, action) {
