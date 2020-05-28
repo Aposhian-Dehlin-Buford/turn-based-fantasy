@@ -19,7 +19,6 @@ const Dashboard = ({ setSocket }) => {
     //   socket.disconnect()
     // }
   }, [])
-  console.log(gameState)
   return (
     <div>
       {socket && (
