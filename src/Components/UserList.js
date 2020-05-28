@@ -32,6 +32,7 @@ const UserList = ({ setGameState }) => {
       })
     })
     socket.on("game-start", (body) => {
+      console.log(body)
       setGameState(body, user.user_id)
     })
   }, [])

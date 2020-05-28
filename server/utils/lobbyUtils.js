@@ -5,8 +5,35 @@ const removeSocketId = (users) =>
     user_id,
   }))
 
+const newGenerateInitialGameState = (
+  io,
+  { challenger, opponent },
+  challengerSocket,
+  opponentSocket
+) => {
+  const activePlayer = Math.floor(Math.random() * 2 < 1) ? 0 : 1
+  const state = {
+    active: false,
+    gameStart: true,
+    activePlayer,
+    players: [challenger, opponent],
+    room: `${challenger.user_id}-${opponent.user_id}`,
+    resources: { tech: 1 },
+    map: {},
+    // buildings: {},
+    // units: {},
+  }
+  io.sockets.connected[challengerSocket.socket_id]
+    .join(state.room)
+    .emit("game-start", state)
+  io.sockets.connected[opponentSocket.socket_id]
+    .join(state.room)
+    .emit("game-start", state)
+}
+
 module.exports = {
   removeSocketId,
+  newGenerateInitialGameState,
   generateInitialGameState: ({ challenger, opponent }) => {
     const activePlayer = Math.floor(Math.random() * 2 < 1) ? 0 : 1
     const players = [
@@ -58,7 +85,7 @@ module.exports = {
     )
     users.splice(userIndex, 1)
     app.set("users", users)
-    socket.leave('userlist')
+    socket.leave("userlist")
     io.in("userlist").emit("users", removeSocketId(users))
     return user_id
   },

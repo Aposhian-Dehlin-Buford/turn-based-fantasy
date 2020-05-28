@@ -1,4 +1,5 @@
 const {
+  newGenerateInitialGameState,
   removeUserFromList,
   removeUserChallenges,
   generateInitialGameState,
@@ -45,9 +46,10 @@ module.exports = {
       removeUserChallenges(opponent.user_id, app)
       app.set("lobbies", lobbies)
       const { room } = gameState
-      io.sockets.connected[challengerSocket.socket_id].join(room)
-      io.sockets.connected[opponentSocket.socket_id].join(room)
-      io.to(room).emit("game-start", gameState)
+      newGenerateInitialGameState(io, body, challengerSocket, opponentSocket)
+      // io.sockets.connected[challengerSocket.socket_id].join(room)
+      // io.sockets.connected[opponentSocket.socket_id].join(room)
+      // io.to(room).emit("game-start", gameState)
     }
   },
   joinLobby: (app, body) => {},
