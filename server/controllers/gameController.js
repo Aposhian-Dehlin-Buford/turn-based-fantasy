@@ -5,7 +5,7 @@ const progressResources = (resources) => {
 }
 module.exports = {
   endTurn: (app, socket, { resources, room }) => {
-    console.log(resources)
+    // console.log(resources)
     const io = app.get("io")
     socket.emit("update-resources",  progressResources(resources) )
     io.in(room).emit("change-player")

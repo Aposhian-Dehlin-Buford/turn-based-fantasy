@@ -36,8 +36,9 @@ module.exports = {
     const lobbies = app.get("lobbies")
     const { challenger, opponent } = body
     if (findChallengeIndex(challenges, body) !== -1) {
-      const gameState = generateInitialGameState(body)
-      lobbies.push(gameState)
+      // const gameState = generateInitialGameState(body)
+      // lobbies.push(gameState)
+      lobbies.push(`${challenger.user_id}-${opponent.user_id}`)
       const challengerSocket = users.find(
         (u) => +challenger.user_id === +u.user_id
       )
@@ -45,7 +46,7 @@ module.exports = {
       removeUserChallenges(challenger.user_id, app)
       removeUserChallenges(opponent.user_id, app)
       app.set("lobbies", lobbies)
-      const { room } = gameState
+      // const { room } = gameState
       newGenerateInitialGameState(io, body, challengerSocket, opponentSocket)
       // io.sockets.connected[challengerSocket.socket_id].join(room)
       // io.sockets.connected[opponentSocket.socket_id].join(room)

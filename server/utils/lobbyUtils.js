@@ -15,11 +15,11 @@ const newGenerateInitialGameState = (
   const state = {
     active: false,
     gameStart: true,
+    room: `${challenger.user_id}-${opponent.user_id}`,
     activePlayer,
     players: [challenger, opponent],
-    room: `${challenger.user_id}-${opponent.user_id}`,
     resources: { tech: 1 },
-    map: {},
+    map: [],
     // buildings: {},
     // units: {},
   }
