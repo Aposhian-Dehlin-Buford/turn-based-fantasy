@@ -6,9 +6,7 @@ const removeSocketId = (users) =>
   }))
 
 module.exports = {
-  removeSocketId: (users) => {
-    return removeSocketId(users)
-  },
+  removeSocketId,
   generateInitialGameState: ({ challenger, opponent }) => {
     const activePlayer = Math.floor(Math.random() * 2 < 1) ? 0 : 1
     const players = [

@@ -48,7 +48,7 @@ massive({
     socket.on('join', (body) => userCtrl.join(app, body, socket))
     socket.on('challenge', (body) => lobbyCtrl.challenge(app, body))
     socket.on('accept-challenge', (body) => lobbyCtrl.acceptChallenge(app, body))
-    socket.on('end-turn', (body) => gameCtrl.endTurn(app, body))
+    socket.on('end-turn', (body) => gameCtrl.endTurn(app, socket, body))
   })
 })
 
