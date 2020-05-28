@@ -3,20 +3,21 @@ import useInput from "../hooks/useInput"
 import { useHistory } from "react-router-dom"
 import axios from "axios"
 import { setUser } from "../redux/authReducer"
-import { connect } from "react-redux"
+import { useDispatch } from "react-redux"
 
-const Login = ({ setUser }) => {
+const Login = () => {
+  const { push } = useHistory()
+  const dispatch = useDispatch()
   const [{ username, password }, { setInput }] = useInput({
     username: "",
     password: "",
   })
-  const { push } = useHistory()
   const login = (e) => {
     e.preventDefault()
     axios
       .post("/auth/login", { username, password })
       .then(({ data }) => {
-        setUser(data)
+        dispatch(setUser(data))
         push("/dashboard")
       })
       .catch((err) => console.log(err))
@@ -44,4 +45,4 @@ const Login = ({ setUser }) => {
   )
 }
 
-export default connect(null, { setUser })(Login)
+export default Login
