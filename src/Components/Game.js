@@ -1,22 +1,20 @@
 import React, { useEffect } from "react"
-import { useSelector } from "react-redux"
-import { connect } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
 import { updateResources, updateActivePlayer } from "../redux/newGameReducer"
 
-const Game = ({ updateResources, updateActivePlayer }) => {
+const Game = () => {
+  const dispatch = useDispatch()
   const { socket } = useSelector(({ socketReducer }) => socketReducer)
   const { user } = useSelector(({ authReducer }) => authReducer)
   const { active, map, me, resources, room } = useSelector(
     ({ newGameReducer }) => newGameReducer
   )
-  // const { me, opponent, players, map, active, activePlayer, room } = gameState
-  // console.log(gameState)
   useEffect(() => {
     socket.on("update-resources", (resources) => {
-      updateResources(resources)
+      dispatch(updateResources(resources))
     })
     socket.on("change-player", () => {
-      updateActivePlayer()
+      dispatch(updateActivePlayer())
     })
   }, [])
   return (
@@ -29,7 +27,6 @@ const Game = ({ updateResources, updateActivePlayer }) => {
             onClick={() =>
               socket.emit("end-turn", {
                 resources: resources,
-                // activePlayer,
                 room,
               })
             }
@@ -42,4 +39,4 @@ const Game = ({ updateResources, updateActivePlayer }) => {
   )
 }
 
-export default connect(null, { updateResources, updateActivePlayer })(Game)
+export default Game

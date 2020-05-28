@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from "react"
-import {Route} from 'react-router-dom'
 import useAuth from "../hooks/useAuth"
 import io from "socket.io-client"
 import { setSocket } from "../redux/socketReducer"
-import { connect, useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import UserList from "./UserList"
 import Game from "./Game"
-let sock = io.connect("http://localhost:3333")
+// let sock = io.connect("http://localhost:3333")
 
-const Dashboard = ({ setSocket }) => {
+const Dashboard = () => {
   useAuth()
-  // const [toggleUsers, setToggleUsers] = useState(true)
+  const dispatch = useDispatch()
+  const [sock, setSock] = useState(() => io.connect('http://localhost:3333'))
   const { socket } = useSelector(({ socketReducer }) => socketReducer)
   const {gameState} = useSelector(({gameReducer}) => gameReducer)
   useEffect(() => {
-    setSocket(sock)
+    dispatch(setSocket(sock))
     // return () => {
     //   socket.disconnect()
     // }
@@ -23,17 +23,12 @@ const Dashboard = ({ setSocket }) => {
     <div>
       {socket && (
         <>
-        {/* <button
-        onClick = {() => setToggleUsers((t) => !t)}
-        >Toggle Active User List</button> */}
           <UserList />
           {gameState.gameStart && <Game />}
-          {/* <Route path="/userlist" component={UserList} />
-          <Route path="/game" component={Game} /> */}
         </>
       )}
     </div>
   )
 }
 
-export default connect(null, { setSocket })(Dashboard)
+export default Dashboard

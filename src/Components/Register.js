@@ -3,21 +3,22 @@ import useInput from "../hooks/useInput"
 import { useHistory } from "react-router-dom"
 import axios from "axios"
 import { setUser } from "../redux/authReducer"
-import { connect } from "react-redux"
+import { useDispatch } from "react-redux"
 
-const Register = ({ setUser }) => {
+const Register = () => {
+  const { push } = useHistory()
+  const dispatch = useDispatch()
   const [{ username, email, password }, { setInput }] = useInput({
     username: "",
     email: "",
     password: "",
   })
-  const { push } = useHistory()
   const register = (e) => {
     e.preventDefault()
     axios
       .post("/auth/register", { email, username, password })
       .then(({ data }) => {
-        setUser(data)
+        dispatch(setUser(data))
         push("/dashboard")
       })
   }
@@ -44,10 +45,10 @@ const Register = ({ setUser }) => {
           value={password}
           onChange={setInput}
         />
-        <button type="submit">Login</button>
+        <button type="submit">Register</button>
       </form>
     </div>
   )
 }
 
-export default connect(null, { setUser })(Register)
+export default Register
