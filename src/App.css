@@ -1,6 +1,6 @@
 .App {
   height: 100vh;
-  padding: 50px;
+  padding: -50px;
   overflow: hidden;
   box-sizing: border-box;
 }
