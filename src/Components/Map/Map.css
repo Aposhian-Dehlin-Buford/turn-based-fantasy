@@ -6,6 +6,11 @@
     grid-template-rows: repeat(18, 250px);
     grid-template-columns: repeat(17, 300px);
     /* position: absolute; */
+    /* top: -110px;
+    left: -150px; */
+    /* -webkit-transform: scaleY(0.5774) rotate(-45deg); */
+    /* -ms-transform: scaleY(0.5774) rotate(-45deg); */
+    /* transform: rotate(30deg); */
 
 }
 
