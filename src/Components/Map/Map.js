@@ -32,16 +32,16 @@ const Map = (props) => {
 
     const move = ({keyCode}) => {
         if(keyCode === 37 || keyCode === 65){
-            setViewIndex([viewIndex[0], viewIndex[1]-1])
+            setViewIndex([viewIndex[0], viewIndex[1]-2])
         }
         if(keyCode === 38 || keyCode === 87){
-            setViewIndex([viewIndex[0]-1, viewIndex[1]])
+            setViewIndex([viewIndex[0]-2, viewIndex[1]])
         }
         if(keyCode === 39 || keyCode === 68){
-            setViewIndex([viewIndex[0], viewIndex[1]+1])
+            setViewIndex([viewIndex[0], viewIndex[1]+2])
         }
         if(keyCode === 40 || keyCode === 83){
-            setViewIndex([viewIndex[0]+1, viewIndex[1]])
+            setViewIndex([viewIndex[0]+2, viewIndex[1]])
         }
     }
 
